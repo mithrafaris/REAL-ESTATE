@@ -4,6 +4,10 @@ import UserLogin from '../pages/User/UserSignIn';
 import Home from '../pages/User/home';
 import PageNotFound from '../componts/PageError';
 import About from '../pages/User/About';
+import SignUp from '../pages/User/UserSignUp';
+import ForgetPassword from '../pages/User/ForgetPassword';
+
+
 
 const Router = createBrowserRouter([
   {
@@ -24,6 +28,13 @@ const Router = createBrowserRouter([
   {
     path:"/About",
     element:<About/>
+  },
+  {
+    path:"/SignUp",
+    element:<SignUp/>
+  },{
+    path:'/ForgotPassword',
+    element:<ForgetPassword/>
   }
 
 
