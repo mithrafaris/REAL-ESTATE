@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "dev":" nodemon API/server.js",
+    "dev": " nodemon API/server.js",
     "start": " node API/server.js"
   },
   "author": "",
@@ -15,6 +15,7 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.408.0",
     "mongoose": "^8.4.4",
     "morgan": "^1.10.0",
     "nodemon": "^3.1.4"
