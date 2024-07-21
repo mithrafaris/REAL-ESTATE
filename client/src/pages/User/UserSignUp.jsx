@@ -119,9 +119,7 @@ function SignUp() {
                 <span className="text-blue-700"> Sign In</span>
               </Link>
             </div>
-            <a className="text-sm underline-offset-2 text-gray-900 font-medium cursor-pointer">
-              Forgot Password?
-            </a>
+           
           </div>
           <div className="w-full flex items-center justify-center my-4">
             <p className="text-lg text-white/80">or</p>
