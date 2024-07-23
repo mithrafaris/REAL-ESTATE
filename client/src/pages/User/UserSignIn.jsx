@@ -7,6 +7,8 @@ import { styled } from '@mui/system';
 import google from '../../assets/google.png';
 import { Eye, EyeOff } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
+import { useDispatch, useSelector } from 'react-redux';
+import { signInStart, signInSuccess, signInFailure } from '../../redux/user/userSlice';
 
 const CursiveTypography = styled(Typography)({
   fontFamily: 'cursive',
@@ -16,13 +18,14 @@ const CursiveTypography = styled(Typography)({
 function SignIn() {
   const [formData, setFormData] = useState({});
   const [isShow, setIsShow] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const { loading,error} = useSelector((state) => state.user);
 
   const toggleState = () => {
     setIsShow(!isShow);
   };
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setFormData({
@@ -33,8 +36,10 @@ function SignIn() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+
     try {
+      dispatch(signInStart());
+
       const res = await fetch('/user/signin', {
         method: 'POST',
         headers: {
@@ -42,19 +47,22 @@ function SignIn() {
         },
         body: JSON.stringify(formData),
       });
+
       const data = await res.json();
-      setLoading(false);
+
       if (res.ok) {
-        toast('Login successful', {
+        dispatch(signInSuccess(data.message));
+        toast.success('Login successful', {
           icon: '👏',
         });
         navigate('/Home');
       } else {
+        dispatch(signInFailure(data.message));
         toast.error(data.message || 'Sign-in failed.');
       }
     } catch (error) {
+      dispatch(signInFailure('Something went wrong'));
       toast.error('Something went wrong');
-      setLoading(false);
     }
   };
 
