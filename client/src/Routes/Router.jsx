@@ -6,43 +6,44 @@ import PageNotFound from '../componts/PageError';
 import About from '../pages/User/About';
 import SignUp from '../pages/User/UserSignUp';
 import ForgetPassword from '../pages/User/ForgetPassword';
-
-
+import Profile from '../pages/User/Profile';
+import PrivateRoute from '../componts/PrivateRoute';
 
 const Router = createBrowserRouter([
   {
     path: "/*",
     element: <PageNotFound />,
   },
-
-  //user
   {
-    //login
     path: "/SignIn",
-    element: <UserLogin/>
-  
+    element: <UserLogin />
   },
   {
-    path:"/Home",
-    element:<Home/>
+    path: "/Home",
+    element: <Home />
   },
   {
-    path:"/About",
-    element:<About/>
+    path: "/About",
+    element: <About />
   },
   {
-    //signup
-    path:"/SignUp",
-    element:<SignUp/>
-  },{
-    path:'/ForgotPassword',
-    element:<ForgetPassword/>
+    path: "/SignUp",
+    element: <SignUp />
+  },
+  {
+    path: '/ForgotPassword',
+    element: <ForgetPassword />
+  },
+  {
+    path: "/Profile",
+    element: <PrivateRoute />, 
+    children: [
+      {
+        path: "",
+        element: <Profile />
+      }
+    ]
   }
-
-
-
-
-
 ]);
 
 export default Router;
