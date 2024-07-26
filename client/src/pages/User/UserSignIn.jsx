@@ -1,14 +1,15 @@
+// components/SignIn.jsx
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 import cartbg from '../../assets/cartbg.jpg';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/system';
-import google from '../../assets/google.png';
 import { Eye, EyeOff } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { signInStart, signInSuccess, signInFailure } from '../../redux/user/userSlice';
+import OAuth from '../../componts/OAuth';
 
 const CursiveTypography = styled(Typography)({
   fontFamily: 'cursive',
@@ -18,7 +19,7 @@ const CursiveTypography = styled(Typography)({
 function SignIn() {
   const [formData, setFormData] = useState({});
   const [isShow, setIsShow] = useState(false);
-  const { loading,error} = useSelector((state) => state.user);
+  const { loading, error, currentUser } = useSelector((state) => state.user);
 
   const toggleState = () => {
     setIsShow(!isShow);
@@ -51,7 +52,7 @@ function SignIn() {
       const data = await res.json();
 
       if (res.ok) {
-        dispatch(signInSuccess(data.message));
+        dispatch(signInSuccess(data));
         toast.success('Login successful', {
           icon: '👏',
         });
@@ -124,10 +125,7 @@ function SignIn() {
           <div className="w-full flex items-center justify-center my-4">
             <p className="text-lg text-white/80">or</p>
           </div>
-          <button className="w-full my-7 py-2 text-black bg-white font-semibold rounded-md text-center flex items-center justify-center uppercase hover:opacity-75 disabled:opacity-80">
-            <img src={google} className="h-6 mr-2" alt="Google Icon" />
-            Sign In with Google
-          </button>
+         <OAuth/>
         </div>
       </div>
       <Toaster />

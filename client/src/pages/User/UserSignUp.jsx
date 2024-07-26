@@ -4,9 +4,10 @@ import logo from '../../assets/logo.png';
 import cartbg from '../../assets/cartbg.jpg';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/system';
-import google from '../../assets/google.png';
+
 import { Eye, EyeOff } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
+import OAuth from '../../componts/OAuth';
 
 const CursiveTypography = styled(Typography)({
   fontFamily: 'cursive',
@@ -95,6 +96,8 @@ function SignUp() {
             <div className="relative">
               <input
                 id="password"
+                autocomplete="current-password"
+                required
                 type={isShow ? 'text' : 'password'}
                 placeholder="Password"
                 onChange={handleChange}
@@ -124,10 +127,7 @@ function SignUp() {
           <div className="w-full flex items-center justify-center my-4">
             <p className="text-lg text-white/80">or</p>
           </div>
-          <button className="w-full my-7 py-2 text-black bg-white font-semibold rounded-md text-center flex items-center justify-center uppercase hover:opacity-75 disabled:opacity-80">
-            <img src={google} className="h-6 mr-2" alt="Google Icon" />
-            Sign In with Google
-          </button>
+          <OAuth/>
         </div>
       </div>
       <Toaster />

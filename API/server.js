@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const dotenv = require('dotenv');
 const connectDB = require('./Database/connection');
-const userRoute = require('./Route/userRoute/user.route.js');
+const userRoute = require('./Route/userRoute/userRoutes.js');
 
 dotenv.config({ path: path.join(__dirname, '.env') });
 

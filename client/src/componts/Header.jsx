@@ -14,11 +14,9 @@ const CursiveTypography = styled(Typography)({
 function Header() {
   return (
     <header className='bg-slate-500 shadow-md p-4'>
-      <div className='flex flex-col sm:flex-row justify-between items-center max-w-6xl mx-auto'>
-        <div className='flex items-center'>
+    <div className='flex flex-col sm:flex-row justify-between items-center max-w-6xl mx-auto'>
+    <div className='flex items-center'>
           <img src={logo} alt='Real Estate Logo' className='h-12 w-12 mr-2' />
-        
-          
           <Box display="flex" flexWrap="wrap">
             <CursiveTypography variant="h4" component="span" sx={{ color: 'cornsilk' }}>
               Real
@@ -41,9 +39,11 @@ function Header() {
 <ul className='flex gap-4'>
 <Link to = '/Home'>
  <li className ='hidden sm:inline text-slate-900 hover:underline'>Home</li> </Link>
-<Link to ='/About'><li className ='hidden sm:inline  text-slate-900 hover:underline'>About</li></Link>
+<Link to ='/About'>
+<li className ='hidden sm:inline  text-slate-900 hover:underline'>About</li></Link>
 <Link to='/signin'>
-<li className ='hidden sm:inline  text-slate-900 hover:underline'>SignIn</li></Link>
+<li className ='hidden sm:inline  text-slate-900 hover:underline'>SignIn</li>
+</Link>
 </ul>
       </div>
     </header>
