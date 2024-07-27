@@ -15,10 +15,10 @@ const CursiveTypography = styled(Typography)({
 function Header() {
   const { currentUser } = useSelector(state => state.user);
   return (
-    <header className='bg-slate-500 shadow-md p-4'>
-      <div className='flex flex-col sm:flex-row justify-between items-center max-w-6xl mx-auto'>
-        <div className='flex items-center'>
-          <img src={logo} alt='Real Estate Logo' className='h-12 w-12 mr-2' />
+    <header className="bg-slate-500 shadow-md p-4">
+      <div className="flex flex-col sm:flex-row justify-between items-center max-w-6xl mx-auto">
+        <div className="flex items-center mb-4 sm:mb-0">
+          <img src={logo} alt="Real Estate Logo" className="h-12 w-12 mr-2" />
           <Box display="flex" flexWrap="wrap">
             <CursiveTypography variant="h4" component="span" sx={{ color: 'cornsilk' }}>
               Real
@@ -28,7 +28,7 @@ function Header() {
             </CursiveTypography>
           </Box>
         </div>
-        <form className="bg-slate-300 p-2 rounded-lg flex items-center">
+        <form className="bg-slate-300 p-2 rounded-lg flex items-center mb-4 sm:mb-0">
           <input
             type="text"
             placeholder="Search..."
@@ -38,20 +38,20 @@ function Header() {
             <FaSearch />
           </div>
         </form>
-        <ul className='flex gap-4'>
-          <Link to='/Home'>
-            <li className='hidden sm:inline text-slate-900 hover:underline'>Home</li>
+        <ul className="flex gap-4 items-center">
+          <Link to="/Home">
+            <li className="hidden sm:inline text-slate-900 hover:underline">Home</li>
           </Link>
-          <Link to='/About'>
-            <li className='hidden sm:inline text-slate-900 hover:underline'>About</li>
+          <Link to="/About">
+            <li className="hidden sm:inline text-slate-900 hover:underline">About</li>
           </Link>
           {currentUser ? (
-            <Link to='/Profile'>
+            <Link to="/Profile">
               <img src={currentUser.avatar} alt="profile" className="h-8 w-8 rounded-full object-cover" />
             </Link>
           ) : (
-            <Link to='/SignIn'>
-              <li className='hidden sm:inline text-slate-900 hover:underline'>Sign In</li>
+            <Link to="/SignIn">
+              <li className="hidden sm:inline text-slate-900 hover:underline">Sign In</li>
             </Link>
           )}
         </ul>

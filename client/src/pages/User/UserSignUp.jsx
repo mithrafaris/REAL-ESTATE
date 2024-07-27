@@ -7,7 +7,7 @@ import { styled } from '@mui/system';
 
 import { Eye, EyeOff } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
-import OAuth from '../../componts/OAuth';
+import OAuth from '../../components/OAuth';
 
 const CursiveTypography = styled(Typography)({
   fontFamily: 'cursive',
@@ -71,7 +71,7 @@ function SignUp() {
         <div className="text-center">
           <img src={logo} className="w-20 h-20 mx-auto" alt="Logo" />
           <div className="flex justify-center mb-4 md:mb-6">
-            <CursiveTypography variant="h4" component="span" sx={{ color: 'cornsilk' }}>
+            <CursiveTypography variant="h4" component="span" sx={{ color: 'goldenrod' }}>
               Real
             </CursiveTypography>
             <CursiveTypography variant="h4" component="span" sx={{ color: 'black' }}>
@@ -119,7 +119,7 @@ function SignUp() {
             <div>
               Have an account?
               <Link to="/signin">
-                <span className="text-blue-700"> Sign In</span>
+                <span className="text-red-900"> Sign In</span>
               </Link>
             </div>
            
