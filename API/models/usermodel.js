@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+
+
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -19,7 +21,7 @@ const userSchema = new mongoose.Schema({
   },
   avatar: {
     type: String,
-    default: "https://pixabay.com/vectors/group-user-icon-person-personal-2935521/"
+    default:"https://cdn-icons-png.flaticon.com/128/9131/9131529.png"
   }
 }, { timestamps: true });
 

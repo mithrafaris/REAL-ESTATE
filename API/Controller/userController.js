@@ -41,3 +41,33 @@ exports.signIn = async (req, res, next) => {
     next(error)
   }
 }
+
+
+exports.updateUser = async (req, res, next) => {
+    try {
+      
+        if (!req.user || req.user.id !== req.params.id) {
+            return next(errorHandler(401, "You can only update your own account"));
+        }
+        if (req.body.password) {
+            req.body.password = bcryptjs.hashSync(req.body.password, 10);
+        }
+        const updatedUser = await User.findByIdAndUpdate(
+            req.params.id,
+            {
+                $set: {
+                    username: req.body.username,
+                    email: req.body.email,
+                    password: req.body.password,
+                    avatar: req.body.avatar
+                }
+            },
+            { new: true }
+        );
+        const { password, ...rest } = updatedUser._doc;
+        res.status(200).json(rest);
+    } catch (error) {
+        // Pass any errors to the error handling middleware
+        next(error);
+    }
+};

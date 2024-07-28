@@ -73,9 +73,7 @@ function Profile() {
               <span className="text-slate-700">{`Uploading${filePerc}%`}</span>
             ) : filePerc === 100 ? (
               <span className="text-green-700">Image successfully uploaded!</span>
-            ) : (
-               ''
-            )}
+            ) : ('')}
           </p>
           <input
             type="text"
