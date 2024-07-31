@@ -31,43 +31,65 @@ exports.signIn = async (req, res, next) => {
     if (!validPassword) return next(errorHandler(401, 'Wrong credentials!'));
 
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET_KEY);
-    const{password:pass,...rest}=validUser._doc;
+    const { password: pass, ...rest } = validUser._doc;
     res
-    .cookie('access_token',
-       token,{httpOnly:true})
-.status(200)
-.json(rest)
-  }catch(error){
-    next(error)
+      .cookie('access_token', token, { httpOnly: true })
+      .status(200)
+      .json(rest);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Update User Function
+exports.updateUser = async (req, res, next) => {
+  try {
+    if (!req.user || req.user.id !== req.params.id) {
+      return next(errorHandler(401, "You can only update your own account"));
+    }
+    if (req.body.password) {
+      req.body.password = bcryptjs.hashSync(req.body.password, 10);
+    }
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: {
+          username: req.body.username,
+          email: req.body.email,
+          password: req.body.password,
+          avatar: req.body.avatar,
+        },
+      },
+      { new: true }
+    );
+    const { password, ...rest } = updatedUser._doc;
+    res.status(200).json(rest);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Delete User Function
+exports.deleteUser = async (req, res, next) => {
+  try {
+    if (!req.user || req.user.id !== req.params.id) {
+      return next(errorHandler(401, 'You can only delete your own account!'));
+    }
+    await User.findByIdAndDelete(req.params.id);
+    res
+      .clearCookie('access_token')
+      .status(200)
+      .json({ message: 'User has been deleted!' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.signOut =async(req,res,next)=>{
+  try {
+    res.clearCookie('access_token');
+    res.status(200).json('User has been signed out');
+  } catch (error) {
+    next(error);
   }
 }
-
-
-exports.updateUser = async (req, res, next) => {
-    try {
-      
-        if (!req.user || req.user.id !== req.params.id) {
-            return next(errorHandler(401, "You can only update your own account"));
-        }
-        if (req.body.password) {
-            req.body.password = bcryptjs.hashSync(req.body.password, 10);
-        }
-        const updatedUser = await User.findByIdAndUpdate(
-            req.params.id,
-            {
-                $set: {
-                    username: req.body.username,
-                    email: req.body.email,
-                    password: req.body.password,
-                    avatar: req.body.avatar
-                }
-            },
-            { new: true }
-        );
-        const { password, ...rest } = updatedUser._doc;
-        res.status(200).json(rest);
-    } catch (error) {
-        // Pass any errors to the error handling middleware
-        next(error);
-    }
-};

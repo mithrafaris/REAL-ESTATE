@@ -3,7 +3,7 @@ import Header from '../../components/Header';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { useSelector, useDispatch } from 'react-redux';
 import { app } from '../../firebase';
-import { updateUserStart, updateUserFailure, updateUserSuccess } from '../../redux/user/userSlice';
+import { updateUserStart, updateUserFailure, updateUserSuccess, deleteUserStart, deleteUserFailure, deleteUserSuccess, signOutUserStart, signInFailure, signOutUserSuccess } from '../../redux/user/userSlice';
 import toast, { Toaster } from 'react-hot-toast';
 
 function Profile() {
@@ -35,6 +35,7 @@ function Profile() {
       },
       (error) => {
         setFileUploadError(true);
+        console.error("File upload error: ", error);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) =>
@@ -69,7 +70,43 @@ function Profile() {
       dispatch(updateUserFailure(error.message));
       toast.error('Update failed');
     }
-  };
+  }
+
+  const handleDeleteUser = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`/user/delete/${currentUser._id}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (!res.ok || data.success === false) {
+        throw new Error(data.message || 'Failed to delete');
+      }
+      dispatch(deleteUserSuccess(data));
+      toast.success('Account deleted successfully');
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
+      toast.error('Failed to delete account');
+    }
+  }
+  const handleSignOut = async () => {
+    try {
+      dispatch(signOutUserStart());
+      const res = await fetch('/user/signOut', {
+        method: 'GET', 
+      });
+      const data = await res.json();
+      if (!res.ok || data.success === false) {
+        throw new Error(data.message || 'Failed to sign out');
+      }
+      dispatch(signOutUserSuccess(data));
+      toast.success('Signed out successfully');
+    } catch (error) {
+      dispatch(signInFailure(error.message));
+      toast.error('Failed to sign out');
+    }
+  }
+  
 
   return (
     <div>
@@ -135,8 +172,8 @@ function Profile() {
         </form>
         {error && <p className="text-red-700 text-center mt-4">{error}</p>}
         <div className="flex justify-between mt-4">
-          <span className="text-red-700 cursor-pointer">Delete Account</span>
-          <span className="text-red-700 cursor-pointer">Sign Out</span>
+          <span onClick={handleDeleteUser} className="text-red-700 cursor-pointer">Delete Account</span>
+          <span onClick={handleSignOut} className="text-red-700 cursor-pointer">Sign Out</span>
         </div>
       </div>
     </div>
