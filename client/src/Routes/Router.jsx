@@ -8,8 +8,12 @@ import SignUp from '../pages/User/UserSignUp';
 import ForgetPassword from '../pages/User/ForgetPassword';
 import Profile from '../pages/User/Profile';
 import PrivateRoute from '../components/PrivateRoute';
+import AdminSignIn from '../pages/Admin/AdminSignIn';
+import AdminSignUp from '../pages/Admin/AdminSignUp';
+import Dashboard from '../pages/Admin/Dashboard';
 
 const Router = createBrowserRouter([
+  //user
   {
     path: "/*",
     element: <PageNotFound />,
@@ -42,8 +46,25 @@ const Router = createBrowserRouter([
         path: "",
         element: <Profile />
       }
+
+     
     ]
+  },
+   //admin
+   {
+    path: '/AdminSignIn',
+    element: <AdminSignIn/>
+  },
+  {
+    path: '/AdminSignUp',
+    element: <AdminSignUp/>
+  },
+  {
+    path:'/Dashboard',
+    element: <Dashboard/>
   }
+  
+
 ]);
 
 export default Router;
