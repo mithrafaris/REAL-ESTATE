@@ -3,6 +3,7 @@ const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { errorHandler } = require('../utils/error');
 
+
 // Sign Up Function
 exports.signUp = async (req, res, next) => {
   const { username, email, password } = req.body;
@@ -93,3 +94,4 @@ exports.signOut =async(req,res,next)=>{
     next(error);
   }
 }
+
