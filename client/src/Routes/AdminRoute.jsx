@@ -10,7 +10,7 @@ function AdminRoute() {
     <BrowserRouter>
 
       <Routes>
-        <Route path="/" element={<Home/>} />
+        <Route path="/Home" element={<Home/>} />
         <Route path="/AdminSignIn" element={<AdminSignIn/>} />
         <Route path="/AdminSignUp" element={<AdminSignUp/>} />
         <Route path='/Dashboard' element={<Dashboard/>} />

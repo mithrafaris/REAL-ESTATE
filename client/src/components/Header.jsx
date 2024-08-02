@@ -14,6 +14,7 @@ const CursiveTypography = styled(Typography)({
 
 function Header() {
   const { currentUser } = useSelector(state => state.user);
+
   return (
     <header className="bg-slate-500 shadow-md p-4">
       <div className="flex flex-col sm:flex-row justify-between items-center max-w-6xl mx-auto">
@@ -39,12 +40,17 @@ function Header() {
           </div>
         </form>
         <ul className="flex gap-4 items-center">
-          <Link to="/Home">
+          <Link to="/home">
             <li className="hidden sm:inline text-slate-900 hover:underline">Home</li>
           </Link>
           <Link to="/About">
             <li className="hidden sm:inline text-slate-900 hover:underline">About</li>
           </Link>
+          {currentUser && (
+            <Link to="/CreateListing">
+              <li className="text-slate-900 hover:underline">New Post</li>
+            </Link>
+          )}
           {currentUser ? (
             <Link to="/Profile">
               <img src={currentUser.avatar} alt="profile" className="h-8 w-8 rounded-full object-cover" />
