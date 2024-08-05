@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import Header from '../../components/Header';
-import { Input, Button } from '@mui/material';
+import { Input, Button, IconButton } from '@mui/material';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import { getStorage, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { app } from '../../firebase';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 // Fix for Leaflet marker icons not appearing correctly in React
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
-  iconUrl:'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-  shadowUrl:'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+  iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
 });
 
 function CreateListing() {
@@ -25,12 +28,15 @@ function CreateListing() {
     furnished: false,
     parking: false,
     type: 'sale',
-    regularPrice:'',
-    discountedPrice:'',
-    offer: false,
     latitude: '',
     longitude: '',
+    offer: false,
   });
+  
+  const [files, setFiles] = useState([]);
+  const [formData, setFormData] = useState({ imageUrl: [] });
+  const [ImageUploadError, setImageUploadError] = useState(false);
+  const [uploading, setuploading] = useState(false)
 
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
@@ -59,6 +65,53 @@ function CreateListing() {
     console.log(listing);
   };
 
+  const handleImageSubmit = (e) => {
+    if (files.length > 0 && files.length + formData.imageUrl.length < 7) {
+      setuploading(true)
+      setImageUploadError(false)
+      const promises = [];
+      for (let i = 0; i < files.length; i++) {
+        promises.push(storeImage(files[i]));
+      }
+      Promise.all(promises).then((urls) => {
+        setFormData({ ...formData, imageUrl: formData.imageUrl.concat(urls) });
+        setImageUploadError(false);
+        setuploading(false)
+      }).catch((err) => {
+        setImageUploadError('Image upload failed (2MB max per image)');
+        setuploading(false)
+      });
+    } else {
+      setImageUploadError('You can only upload up to 6 images per listing');
+      setuploading(false)
+    }
+  };
+
+  const storeImage = async (file) => {
+    return new Promise((resolve, reject) => {
+      const storage = getStorage(app);
+      const fileName = `${new Date().getTime()}_${file.name}`;
+      const storageRef = ref(storage, fileName);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log(`Upload is ${progress}% done`);
+        },
+        (error) => {
+          reject(error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            resolve(downloadURL);
+          });
+        }
+      );
+    });
+  };
+
   function LocationMarker() {
     useMapEvents({
       click(e) {
@@ -75,202 +128,247 @@ function CreateListing() {
     ) : null;
   }
 
+  const handleDeleteImage = (url) => {
+    setFormData({
+      ...formData,
+      imageUrl: formData.imageUrl.filter((i) => i !== url),
+    });
+  };
+
   return (
     <div>
       <Header />
-      <main className='p-3 max-w-4xl mx-auto'>
-        <h1 className='text-3xl font-semibold text-center my-7'>
+      <main className="p-3 max-w-4xl mx-auto">
+        <h1 className="text-3xl font-semibold text-center my-7">
           Create a Listing
         </h1>
-        <form className='flex flex-col gap-6' onSubmit={handleSubmit}>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-            {/* Form fields */}
-            <Input 
-              type='text' 
-              placeholder='Name' 
-              className='border p-2 rounded-lg w-full text-sm' 
-              id='name' 
+        <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Input
+              type="text"
+              placeholder="Name"
+              className="border p-2 rounded-lg w-full text-sm"
+              id="name"
               value={listing.name}
               onChange={handleChange}
-              maxLength='62' 
-              minLength='10' 
-              required 
+              maxLength="62"
+              minLength="10"
+              required
             />
-            <textarea 
-              placeholder='Description' 
-              className='border p-2 rounded-lg h-20 md:h-auto w-full text-sm' 
-              id='description' 
+            <textarea
+              placeholder="Description"
+              className="border p-2 rounded-lg h-20 md:h-auto w-full text-sm"
+              id="description"
               value={listing.description}
               onChange={handleChange}
-              required 
+              required
             />
-            <Input 
-              type='text' 
-              placeholder='Address' 
-              className='border p-2 rounded-lg w-full text-sm' 
-              id='address' 
+            <Input
+              type="text"
+              placeholder="Address"
+              className="border p-2 rounded-lg w-full text-sm"
+              id="address"
               value={listing.address}
               onChange={handleChange}
-              required 
+              required
             />
 
-            {/* Checkboxes */}
-            <div className='flex flex-wrap gap-6'>
-              <div className='flex gap-2 items-center'>
-                <input 
-                  type='checkbox' 
-                  id='sale' 
-                  className='w-4' 
+            <div className="flex flex-wrap gap-6">
+              <div className="flex gap-2 items-center">
+                <input
+                  type="checkbox"
+                  id="sale"
+                  className="w-4 h-4"
                   checked={listing.type === 'sale'}
                   onChange={() => setListing({
                     ...listing,
-                    type: listing.type === 'sale' ? '' : 'sale'
+                    type: listing.type === 'sale' ? '' : 'sale',
                   })}
                 />
-                <span className='text-sm'>Sell</span>
+                <span className="text-sm">Sell</span>
               </div>
-              <div className='flex gap-2 items-center'>
-                <input 
-                  type='checkbox' 
-                  id='rent' 
-                  className='w-4' 
+              <div className="flex gap-2 items-center">
+                <input
+                  type="checkbox"
+                  id="rent"
+                  className="w-4 h-4"
                   checked={listing.type === 'rent'}
                   onChange={() => setListing({
                     ...listing,
-                    type: listing.type === 'rent' ? '' : 'rent'
+                    type: listing.type === 'rent' ? '' : 'rent',
                   })}
                 />
-                <span className='text-sm'>Rent</span>
+                <span className="text-sm">Rent</span>
               </div>
-              <div className='flex gap-2 items-center'>
-                <input 
-                  type='checkbox' 
-                  id='parking' 
-                  className='w-4' 
+              <div className="flex gap-2 items-center">
+                <input
+                  type="checkbox"
+                  id="parking"
+                  className="w-4 h-4"
                   checked={listing.parking}
                   onChange={handleChange}
                 />
-                <span className='text-sm'>Parking spot</span>
+                <span className="text-sm">Parking spot</span>
               </div>
-              <div className='flex gap-2 items-center'>
-                <input 
-                  type='checkbox' 
-                  id='furnished' 
-                  className='w-4' 
+              <div className="flex gap-2 items-center">
+                <input
+                  type="checkbox"
+                  id="furnished"
+                  className="w-4 h-4"
                   checked={listing.furnished}
                   onChange={handleChange}
                 />
-                <span className='text-sm'>Furnished</span>
+                <span className="text-sm">Furnished</span>
               </div>
-              <div className='flex gap-2 items-center'>
-                <input 
-                  type='checkbox' 
-                  id='offer' 
-                  className='w-4' 
+              <div className="flex gap-2 items-center">
+                <input
+                  type="checkbox"
+                  id="offer"
+                  className="w-4 h-4"
                   checked={listing.offer}
                   onChange={handleChange}
                 />
-                <span className='text-sm'>Offer</span>
+                <span className="text-sm">Offer</span>
               </div>
             </div>
 
-            <div className='flex items-center gap-2'>
-              <Input 
-                type="number" 
-                id='bedrooms' 
-                min='1' 
-                max='10' 
-                value={listing.bedrooms} 
-                onChange={handleChange} 
-                className='p-2 border border-gray-300 rounded-lg text-sm'
+            <div className="flex items-center gap-2">
+              <Input
+                type="number"
+                id="bedrooms"
+                min="1"
+                max="10"
+                value={listing.bedrooms}
+                onChange={handleChange}
+                className="p-2 border border-gray-300 rounded-lg text-sm"
                 required
               />
-              <p className='text-sm'>Beds</p>
+              <p className="text-sm">Beds</p>
             </div>
-           
-            <div className='flex items-center gap-2'>
-              <Input 
-                type="number" 
-                id='regularPrice' 
-                min='1' 
-                max='10' 
-                value={listing.regularPrice} 
-                onChange={handleChange} 
-                className='p-2 border border-gray-300 rounded-lg text-sm'
+
+            <div className="flex items-center gap-2">
+              <Input
+                type="number"
+                id="regularPrice"
+                min="1"
+                value={listing.regularPrice}
+                onChange={handleChange}
+                className="p-2 border border-gray-300 rounded-lg text-sm"
                 required
               />
-              <p className='text-sm'>Regular Price
-              <span>($/Month)</span></p>
+              <p className="text-sm">Regular Price <span>($/Month)</span></p>
             </div>
-            <div className='flex items-center gap-2'>
-              <Input 
-                type="number" 
-                id='bathrooms' 
-                min='1' 
-                max='10' 
-                value={listing.bathrooms} 
-                onChange={handleChange} 
-                className='p-2 border border-gray-300 rounded-lg text-sm'
+            <div className="flex items-center gap-2">
+              <Input
+                type="number"
+                id="bathrooms"
+                min="1"
+                max="10"
+                value={listing.bathrooms}
+                onChange={handleChange}
+                className="p-2 border border-gray-300 rounded-lg text-sm"
                 required
               />
-              <p className='text-sm'>Baths</p>
+              <p className="text-sm">Baths</p>
             </div>
-           
-            <div className='flex items-center gap-2'>
-              <Input 
-                type="number" 
-                id='discountedPrice' 
-                min='1' 
-                max='10' 
-                onChange={handleChange} 
-                className='p-2 border border-gray-300 rounded-lg text-sm'
-                required
-              />
-              <p className='text-sm'>Discounted Price
-              <span>($/Month)</span></p>
-            </div>
-            
-            <Input 
-              type="number" 
-              id='latitude' 
-              placeholder='Latitude' 
-              value={listing.latitude} 
-              onChange={handleChange} 
-              className='p-2 border border-gray-300 rounded-lg w-full text-sm' 
+
+            {listing.offer && (
+              <div className="flex items-center gap-2">
+                <Input
+                  type="number"
+                  id="discountedPrice"
+                  min="1"
+                  value={listing.discountPrice}
+                  onChange={handleChange}
+                  className="p-2 border border-gray-300 rounded-lg text-sm"
+                  required={listing.offer}
+                />
+                <p className="text-sm">Discounted Price <span>($/Month)</span></p>
+              </div>
+            )}
+
+            <Input
+              type="number"
+              id="latitude"
+              placeholder="Latitude"
+              value={listing.latitude}
+              onChange={handleChange}
+              className="p-2 border border-gray-300 rounded-lg w-full text-sm"
               required
             />
 
-            <Input 
-              type="number" 
-              id='longitude' 
-              placeholder='Longitude' 
-              value={listing.longitude} 
-              onChange={handleChange} 
-              className='p-2 border border-gray-300 rounded-lg w-full text-sm' 
+            <Input
+              type="number"
+              id="longitude"
+              placeholder="Longitude"
+              value={listing.longitude}
+              onChange={handleChange}
+              className="p-2 border border-gray-300 rounded-lg w-full text-sm"
               required
             />
           </div>
-          
-        <form className='flex flex-col sm:flex-row'>
-        <div className='flex flex-col gap-4 '>
-        <p className='font-semibold'>Images:
-        <span>The first image will be the cover(max 6)</span>
-        </p>
-        <div className='flex flex-1 '>
-        <input className='p-3 border-gray-300 rounded w-full' type="file" id='image'accept='image/*' multiple />
-        <button className='p-3 text-green-700 border-green-700 rounded uppercase hover:shadow-lg disabled:opacity-80'>Upload</button>
-        </div>
-        </div>
-        </form>
-        <div className='flex flex-col md:flex-row gap-4 '>
-        <button className='p-3  text-green-700 border-green-700 rounded uppercase hover:shadow-lg disabled:opacity-80'
-        onClick={handleLocation}
-        >Use Current Location</button>
-      </div>
-          <div className='mt-6 h-80'>
-            <MapContainer 
-              center={[listing.latitude || 51.505, listing.longitude || -0.09]} 
-              zoom={13} 
+
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col gap-4 w-full">
+              <p className="font-semibold">
+                Images: <span>The first image will be the cover (max 6)</span>
+              </p>
+              <div className="flex gap-4 items-center">
+                <input
+                  onChange={(e) => setFiles(e.target.files)}
+                  className="p-3 border border-gray-300 rounded w-full"
+                  type="file"
+                  id="image"
+                  accept="image/*"
+                  multiple
+                />
+                <Button
+                  onClick={handleImageSubmit}
+                  variant="outlined"
+                  color="success"
+                >
+                  {uploading?'Uploading...':'Upload'}
+                </Button>
+              </div>
+              {ImageUploadError && (
+                <p className="text-red-700">{ImageUploadError}</p>
+              )}
+              {formData.imageUrl.length > 0 && (
+                <div className="grid grid-cols-2 md:grid-cols-3 mt-4">
+                  {formData.imageUrl.map((url) => (
+                    <div key={url} className="relative">
+                      <img
+                        src={url}
+                        alt="listing image"
+                        className="w-40 h-40 object-cover rounded-lg"
+                      />
+                      <IconButton
+                        className="absolute top-0 right-0"
+                        onClick={() => handleDeleteImage(url)}
+                      >
+                        <DeleteIcon className="text-red-700" />
+                      </IconButton>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="mt-6">
+            <Button
+              variant="outlined"
+              color="success"
+              onClick={handleLocation}
+            >
+              Current Location
+            </Button>
+          </div>
+
+          <div className="mt-6 h-80 w-full">
+            <MapContainer
+              center={[listing.latitude || 51.505, listing.longitude || -0.09]}
+              zoom={13}
               style={{ height: '100%', width: '100%' }}
             >
               <TileLayer
@@ -280,8 +378,16 @@ function CreateListing() {
               <LocationMarker />
             </MapContainer>
           </div>
-        
-          <button className='p-3 text-green-700 border-green-700 rounded uppercase hover:shadow-lg disabled:opacity-80'>Create Listing</button>
+
+          <div className="mt-6">
+            <Button
+              type="submit"
+              variant="outlined"
+              color="success"
+            >
+              Create Listing
+            </Button>
+          </div>
         </form>
       </main>
     </div>
