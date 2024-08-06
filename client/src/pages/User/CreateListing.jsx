@@ -17,7 +17,7 @@ L.Icon.Default.mergeOptions({
 });
 
 function CreateListing() {
-  const [listing, setListing] = useState({
+  const [formData, setFormData] = useState({
     name: '',
     description: '',
     address: '',
@@ -31,17 +31,17 @@ function CreateListing() {
     latitude: '',
     longitude: '',
     offer: false,
+    imageUrl: [],
   });
-  
+  console.log(formData);
   const [files, setFiles] = useState([]);
-  const [formData, setFormData] = useState({ imageUrl: [] });
   const [ImageUploadError, setImageUploadError] = useState(false);
-  const [uploading, setuploading] = useState(false)
+  const [uploading, setUploading] = useState(false);
 
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
-    setListing({
-      ...listing,
+    setFormData({
+      ...formData,
       [id]: type === 'checkbox' ? checked : value,
     });
   };
@@ -49,8 +49,8 @@ function CreateListing() {
   const handleLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
-        setListing({
-          ...listing,
+        setFormData({
+          ...formData,
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
         });
@@ -62,28 +62,30 @@ function CreateListing() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(listing);
+    console.log(formData);
   };
 
   const handleImageSubmit = (e) => {
     if (files.length > 0 && files.length + formData.imageUrl.length < 7) {
-      setuploading(true)
-      setImageUploadError(false)
+      setUploading(true);
+      setImageUploadError(false);
       const promises = [];
       for (let i = 0; i < files.length; i++) {
         promises.push(storeImage(files[i]));
       }
-      Promise.all(promises).then((urls) => {
-        setFormData({ ...formData, imageUrl: formData.imageUrl.concat(urls) });
-        setImageUploadError(false);
-        setuploading(false)
-      }).catch((err) => {
-        setImageUploadError('Image upload failed (2MB max per image)');
-        setuploading(false)
-      });
+      Promise.all(promises)
+        .then((urls) => {
+          setFormData({ ...formData, imageUrl: formData.imageUrl.concat(urls) });
+          setImageUploadError(false);
+          setUploading(false);
+        })
+        .catch((err) => {
+          setImageUploadError('Image upload failed (2MB max per image)');
+          setUploading(false);
+        });
     } else {
       setImageUploadError('You can only upload up to 6 images per listing');
-      setuploading(false)
+      setUploading(false);
     }
   };
 
@@ -115,16 +117,16 @@ function CreateListing() {
   function LocationMarker() {
     useMapEvents({
       click(e) {
-        setListing({
-          ...listing,
+        setFormData({
+          ...formData,
           latitude: e.latlng.lat,
           longitude: e.latlng.lng,
         });
       },
     });
 
-    return listing.latitude && listing.longitude ? (
-      <Marker position={[listing.latitude, listing.longitude]} />
+    return formData.latitude && formData.longitude ? (
+      <Marker position={[formData.latitude, formData.longitude]} />
     ) : null;
   }
 
@@ -139,9 +141,7 @@ function CreateListing() {
     <div>
       <Header />
       <main className="p-3 max-w-4xl mx-auto">
-        <h1 className="text-3xl font-semibold text-center my-7">
-          Create a Listing
-        </h1>
+        <h1 className="text-3xl font-semibold text-center my-7">Create a Listing</h1>
         <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
@@ -149,7 +149,7 @@ function CreateListing() {
               placeholder="Name"
               className="border p-2 rounded-lg w-full text-sm"
               id="name"
-              value={listing.name}
+              value={formData.name}
               onChange={handleChange}
               maxLength="62"
               minLength="10"
@@ -159,7 +159,7 @@ function CreateListing() {
               placeholder="Description"
               className="border p-2 rounded-lg h-20 md:h-auto w-full text-sm"
               id="description"
-              value={listing.description}
+              value={formData.description}
               onChange={handleChange}
               required
             />
@@ -168,7 +168,7 @@ function CreateListing() {
               placeholder="Address"
               className="border p-2 rounded-lg w-full text-sm"
               id="address"
-              value={listing.address}
+              value={formData.address}
               onChange={handleChange}
               required
             />
@@ -179,11 +179,13 @@ function CreateListing() {
                   type="checkbox"
                   id="sale"
                   className="w-4 h-4"
-                  checked={listing.type === 'sale'}
-                  onChange={() => setListing({
-                    ...listing,
-                    type: listing.type === 'sale' ? '' : 'sale',
-                  })}
+                  checked={formData.type === 'sale'}
+                  onChange={() =>
+                    setFormData({
+                      ...formData,
+                      type: formData.type === 'sale' ? '' : 'sale',
+                    })
+                  }
                 />
                 <span className="text-sm">Sell</span>
               </div>
@@ -192,11 +194,13 @@ function CreateListing() {
                   type="checkbox"
                   id="rent"
                   className="w-4 h-4"
-                  checked={listing.type === 'rent'}
-                  onChange={() => setListing({
-                    ...listing,
-                    type: listing.type === 'rent' ? '' : 'rent',
-                  })}
+                  checked={formData.type === 'rent'}
+                  onChange={() =>
+                    setFormData({
+                      ...formData,
+                      type: formData.type === 'rent' ? '' : 'rent',
+                    })
+                  }
                 />
                 <span className="text-sm">Rent</span>
               </div>
@@ -205,7 +209,7 @@ function CreateListing() {
                   type="checkbox"
                   id="parking"
                   className="w-4 h-4"
-                  checked={listing.parking}
+                  checked={formData.parking}
                   onChange={handleChange}
                 />
                 <span className="text-sm">Parking spot</span>
@@ -215,7 +219,7 @@ function CreateListing() {
                   type="checkbox"
                   id="furnished"
                   className="w-4 h-4"
-                  checked={listing.furnished}
+                  checked={formData.furnished}
                   onChange={handleChange}
                 />
                 <span className="text-sm">Furnished</span>
@@ -225,7 +229,7 @@ function CreateListing() {
                   type="checkbox"
                   id="offer"
                   className="w-4 h-4"
-                  checked={listing.offer}
+                  checked={formData.offer}
                   onChange={handleChange}
                 />
                 <span className="text-sm">Offer</span>
@@ -238,7 +242,7 @@ function CreateListing() {
                 id="bedrooms"
                 min="1"
                 max="10"
-                value={listing.bedrooms}
+                value={formData.bedrooms}
                 onChange={handleChange}
                 className="p-2 border border-gray-300 rounded-lg text-sm"
                 required
@@ -251,12 +255,14 @@ function CreateListing() {
                 type="number"
                 id="regularPrice"
                 min="1"
-                value={listing.regularPrice}
+                value={formData.regularPrice}
                 onChange={handleChange}
                 className="p-2 border border-gray-300 rounded-lg text-sm"
                 required
               />
-              <p className="text-sm">Regular Price <span>($/Month)</span></p>
+              <p className="text-sm">
+                Regular Price <span>($/Month)</span>
+              </p>
             </div>
             <div className="flex items-center gap-2">
               <Input
@@ -264,7 +270,7 @@ function CreateListing() {
                 id="bathrooms"
                 min="1"
                 max="10"
-                value={listing.bathrooms}
+                value={formData.bathrooms}
                 onChange={handleChange}
                 className="p-2 border border-gray-300 rounded-lg text-sm"
                 required
@@ -272,18 +278,20 @@ function CreateListing() {
               <p className="text-sm">Baths</p>
             </div>
 
-            {listing.offer && (
+            {formData.offer && (
               <div className="flex items-center gap-2">
                 <Input
                   type="number"
-                  id="discountedPrice"
+                  id="discountPrice"
                   min="1"
-                  value={listing.discountPrice}
+                  value={formData.discountPrice}
                   onChange={handleChange}
                   className="p-2 border border-gray-300 rounded-lg text-sm"
-                  required={listing.offer}
+                  required={formData.offer}
                 />
-                <p className="text-sm">Discounted Price <span>($/Month)</span></p>
+                <p className="text-sm">
+                discountPrice<span>($/Month)</span>
+                </p>
               </div>
             )}
 
@@ -291,7 +299,7 @@ function CreateListing() {
               type="number"
               id="latitude"
               placeholder="Latitude"
-              value={listing.latitude}
+              value={formData.latitude}
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded-lg w-full text-sm"
               required
@@ -301,7 +309,7 @@ function CreateListing() {
               type="number"
               id="longitude"
               placeholder="Longitude"
-              value={listing.longitude}
+              value={formData.longitude}
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded-lg w-full text-sm"
               required
@@ -322,12 +330,8 @@ function CreateListing() {
                   accept="image/*"
                   multiple
                 />
-                <Button
-                  onClick={handleImageSubmit}
-                  variant="outlined"
-                  color="success"
-                >
-                  {uploading?'Uploading...':'Upload'}
+                <Button onClick={handleImageSubmit} variant="outlined" color="success">
+                  {uploading ? 'Uploading...' : 'Upload'}
                 </Button>
               </div>
               {ImageUploadError && (
@@ -356,18 +360,14 @@ function CreateListing() {
           </div>
 
           <div className="mt-6">
-            <Button
-              variant="outlined"
-              color="success"
-              onClick={handleLocation}
-            >
+            <Button variant="outlined" color="success" onClick={handleLocation}>
               Current Location
             </Button>
           </div>
 
           <div className="mt-6 h-80 w-full">
             <MapContainer
-              center={[listing.latitude || 51.505, listing.longitude || -0.09]}
+              center={[formData.latitude || 51.505, formData.longitude || -0.09]}
               zoom={13}
               style={{ height: '100%', width: '100%' }}
             >
@@ -380,11 +380,7 @@ function CreateListing() {
           </div>
 
           <div className="mt-6">
-            <Button
-              type="submit"
-              variant="outlined"
-              color="success"
-            >
+            <Button type="submit" variant="outlined" color="success">
               Create Listing
             </Button>
           </div>
