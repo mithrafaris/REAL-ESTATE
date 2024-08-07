@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
 import { Input, Button, IconButton } from '@mui/material';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
@@ -7,6 +7,7 @@ import L from 'leaflet';
 import { getStorage, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { app } from '../../firebase';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useSelector } from 'react-redux';
 
 // Fix for Leaflet marker icons not appearing correctly in React
 delete L.Icon.Default.prototype._getIconUrl;
@@ -33,11 +34,13 @@ function CreateListing() {
     offer: false,
     imageUrl: [],
   });
-  console.log(formData);
+
   const [files, setFiles] = useState([]);
   const [ImageUploadError, setImageUploadError] = useState(false);
   const [uploading, setUploading] = useState(false);
-
+  const [loading, setLoading] = useState(false)
+  const [error,setError]=useState(false)
+  const { currentUser } = useSelector((state) => state.user);
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
     setFormData({
@@ -60,9 +63,35 @@ function CreateListing() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    try {
+      if (formData.imageUrl.length < 1)
+        return setError('You must upload at least one image');
+      if (+formData.regularPrice < +formData.discountPrice)
+        return setError('Discount price must be lower than regular price');
+      setLoading(true);
+      setError(false);
+      const res = await fetch('/user/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          userRef: currentUser._id,offer:formData.offer||false
+        }),
+      });
+      const data = await res.json();
+      setLoading(false);
+      if (data.success === false) {
+        setError(data.message);
+      }
+      
+    } catch (error) {
+      setError(error.message);
+      setLoading(false);
+    }
   };
 
   const handleImageSubmit = (e) => {
@@ -115,15 +144,21 @@ function CreateListing() {
   };
 
   function LocationMarker() {
-    useMapEvents({
+    const map = useMapEvents({
       click(e) {
-        setFormData({
-          ...formData,
+        setFormData((prevState) => ({
+          ...prevState,
           latitude: e.latlng.lat,
           longitude: e.latlng.lng,
-        });
+        }));
       },
     });
+
+    useEffect(() => {
+      if (formData.latitude && formData.longitude) {
+        map.setView([formData.latitude, formData.longitude], map.getZoom());
+      }
+    }, [formData.latitude, formData.longitude, map]);
 
     return formData.latitude && formData.longitude ? (
       <Marker position={[formData.latitude, formData.longitude]} />
@@ -136,7 +171,7 @@ function CreateListing() {
       imageUrl: formData.imageUrl.filter((i) => i !== url),
     });
   };
-
+console.log(formData);
   return (
     <div>
       <Header />
@@ -290,7 +325,7 @@ function CreateListing() {
                   required={formData.offer}
                 />
                 <p className="text-sm">
-                discountPrice<span>($/Month)</span>
+                  Discount Price <span>($/Month)</span>
                 </p>
               </div>
             )}
@@ -330,7 +365,10 @@ function CreateListing() {
                   accept="image/*"
                   multiple
                 />
-                <Button onClick={handleImageSubmit} variant="outlined" color="success">
+                <Button onClick={handleImageSubmit} 
+                variant="outlined" 
+                disabled={uploading}
+                color="success">
                   {uploading ? 'Uploading...' : 'Upload'}
                 </Button>
               </div>
@@ -339,7 +377,7 @@ function CreateListing() {
               )}
               {formData.imageUrl.length > 0 && (
                 <div className="grid grid-cols-2 md:grid-cols-3 mt-4">
-                  {formData.imageUrl.map((url) => (
+                  {formData.imageUrl.map((url,index) => (
                     <div key={url} className="relative">
                       <img
                         src={url}
@@ -381,8 +419,9 @@ function CreateListing() {
 
           <div className="mt-6">
             <Button type="submit" variant="outlined" color="success">
-              Create Listing
+            {loading ? 'Creating...' : 'Create listing'}
             </Button>
+            {error && <p className='text-red-700 text-sm'>{error}</p>}
           </div>
         </form>
       </main>
