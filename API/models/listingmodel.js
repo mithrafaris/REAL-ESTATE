@@ -19,13 +19,15 @@ const listingSchema = new mongoose.Schema({
   },
   discountPrice: {
     type: Number,
-    required: true
+    required: function() {
+      return this.offer;
+    }
   },
   bedrooms: {
     type: Number,
     required: true
   },
-  bathrooms:{
+  bathrooms: {
     type: Number,
     required: true
   },
@@ -46,18 +48,18 @@ const listingSchema = new mongoose.Schema({
     required: true
   },
   imageUrl: {
-    type: Array,  
+    type: Array,
     required: true
   },
   userRef: {
-    type: String,  
+    type: String,
     required: true
   },
   latitude: {
-    type: Number 
+    type: Number
   },
   longitude: {
-    type: Number  
+    type: Number
   }
 }, { timestamps: true });
 

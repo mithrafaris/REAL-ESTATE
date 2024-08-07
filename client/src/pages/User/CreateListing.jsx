@@ -8,6 +8,7 @@ import { getStorage, getDownloadURL, ref, uploadBytesResumable } from 'firebase/
 import { app } from '../../firebase';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 // Fix for Leaflet marker icons not appearing correctly in React
 delete L.Icon.Default.prototype._getIconUrl;
@@ -22,10 +23,10 @@ function CreateListing() {
     name: '',
     description: '',
     address: '',
-    regularPrice: '',
-    discountPrice: '',
-    bedrooms: '',
-    bathrooms: '',
+    regularPrice: 100,
+    discountPrice: 0,
+    bedrooms: 1,
+    bathrooms: 1,
     furnished: false,
     parking: false,
     type: 'sale',
@@ -41,6 +42,7 @@ function CreateListing() {
   const [loading, setLoading] = useState(false)
   const [error,setError]=useState(false)
   const { currentUser } = useSelector((state) => state.user);
+  const navigate = useNavigate()
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
     setFormData({
@@ -79,7 +81,8 @@ function CreateListing() {
         },
         body: JSON.stringify({
           ...formData,
-          userRef: currentUser._id,offer:formData.offer||false
+          userRef: currentUser._id,
+          offer:formData.offer||false
         }),
       });
       const data = await res.json();
@@ -87,6 +90,7 @@ function CreateListing() {
       if (data.success === false) {
         setError(data.message);
       }
+      navigate(`/user/${data._id}`)
       
     } catch (error) {
       setError(error.message);
@@ -317,15 +321,15 @@ console.log(formData);
               <div className="flex items-center gap-2">
                 <Input
                   type="number"
-                  id="discountPrice"
+                  id=" discountPrice"
                   min="1"
-                  value={formData.discountPrice}
+                  value={formData. discountPrice}
                   onChange={handleChange}
                   className="p-2 border border-gray-300 rounded-lg text-sm"
-                  required={formData.offer}
+                 
                 />
                 <p className="text-sm">
-                  Discount Price <span>($/Month)</span>
+                   discountPrice <span>($/Month)</span>
                 </p>
               </div>
             )}
@@ -418,7 +422,7 @@ console.log(formData);
           </div>
 
           <div className="mt-6">
-            <Button type="submit" variant="outlined" color="success">
+            <Button disabled={loading||uploading} type="submit" variant="outlined" color="success">
             {loading ? 'Creating...' : 'Create listing'}
             </Button>
             {error && <p className='text-red-700 text-sm'>{error}</p>}
