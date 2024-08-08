@@ -3,8 +3,19 @@ import Header from '../../components/Header';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { useSelector, useDispatch } from 'react-redux';
 import { app } from '../../firebase';
-import { updateUserStart, updateUserFailure, updateUserSuccess, deleteUserStart, deleteUserFailure, deleteUserSuccess, signOutUserStart, signInFailure, signOutUserSuccess } from '../../redux/user/userSlice';
+import { 
+  updateUserStart, 
+  updateUserFailure, 
+  updateUserSuccess, 
+  deleteUserStart, 
+  deleteUserFailure, 
+  deleteUserSuccess, 
+  signOutUserStart, 
+  signInFailure, 
+  signOutUserSuccess 
+} from '../../redux/user/userSlice';
 import toast, { Toaster } from 'react-hot-toast';
+import { Link } from 'react-router-dom';
 
 function Profile() {
   const fileRef = useRef(null);
@@ -13,6 +24,8 @@ function Profile() {
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
+  const [showListingError, setShowListingError] = useState(false);
+  const [userListing, setUserListing] = useState([]);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -63,14 +76,12 @@ function Profile() {
         throw new Error(data.message || 'Failed to update');
       }
       dispatch(updateUserSuccess(data));
-      toast.success('Update successful', {
-        icon: '👏',
-      });
+      toast.success('Update successful', { icon: '👏' });
     } catch (error) {
       dispatch(updateUserFailure(error.message));
       toast.error('Update failed');
     }
-  }
+  };
 
   const handleDeleteUser = async () => {
     try {
@@ -88,12 +99,13 @@ function Profile() {
       dispatch(deleteUserFailure(error.message));
       toast.error('Failed to delete account');
     }
-  }
+  };
+
   const handleSignOut = async () => {
     try {
       dispatch(signOutUserStart());
       const res = await fetch('/user/signOut', {
-        method: 'GET', 
+        method: 'GET',
       });
       const data = await res.json();
       if (!res.ok || data.success === false) {
@@ -105,8 +117,22 @@ function Profile() {
       dispatch(signInFailure(error.message));
       toast.error('Failed to sign out');
     }
-  }
-  
+  };
+
+  const handleShowListings = async () => {
+    try {
+      setShowListingError(false);
+      const res = await fetch(`/user/listing/${currentUser._id}`);
+      const data = await res.json();
+      if (data.success === false) {
+        setShowListingError(true);
+        return;
+      }
+      setUserListing(data);
+    } catch (error) {
+      setShowListingError(true);
+    }
+  };
 
   return (
     <div>
@@ -174,6 +200,43 @@ function Profile() {
         <div className="flex justify-between mt-4">
           <span onClick={handleDeleteUser} className="text-red-700 cursor-pointer">Delete Account</span>
           <span onClick={handleSignOut} className="text-red-700 cursor-pointer">Sign Out</span>
+        </div>
+        <div>
+          <button onClick={handleShowListings} className="text-green-700 w-full">
+            Show Listings
+          </button>
+          <p className="text-red-700 mt-5">
+            {showListingError ? 'Error showing listings' : ''}
+          </p>
+          {userListing && userListing.length > 0 && (
+            <div className='flex flex-col gap-4'>
+              <h1 className='text-center mt-7 text-2xl font-semibold'>
+                Your Listings
+              </h1>
+              {userListing.map((listing) => (
+                <div
+                  key={listing._id}
+                  className='border rounded-lg p-3 flex justify-between items-center gap-4'
+                >
+                  <Link to={`/listing/${listing._id}`}>
+                    <img
+                      src={listing.imageUrl[0]}
+                      alt='listing cover'
+                      className='h-16 w-16 object-contain'
+                    />
+                  </Link>
+                  <Link
+                    className='text-slate-700 font-semibold hover:underline truncate flex-1'
+                    to={`/listing/${listing._id}`}
+                  >
+                    <p>{listing.name}</p>
+                  </Link>
+                  <button className='text-red-700 uppercase'>Delete</button>
+                  <button className='text-green-700 uppercase'>edit</button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

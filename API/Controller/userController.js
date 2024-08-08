@@ -2,6 +2,7 @@ const User = require('../models/usermodel');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { errorHandler } = require('../utils/error');
+const Listing = require('../models/listingmodel');
 
 
 // Sign Up Function
@@ -94,4 +95,15 @@ exports.signOut =async(req,res,next)=>{
     next(error);
   }
 }
-
+exports.getUserListings = async(req,res,next)=>{
+  if(req.user.id === req.params.id){
+    try {
+      const listing = await Listing.find({userRef:req.params.id})
+      res.status(200).json(listing)
+    } catch (error) {
+      next(error)
+    }
+  }else{
+    return next(errorHandler(401,'you can only view your own listings!'))
+  }
+}

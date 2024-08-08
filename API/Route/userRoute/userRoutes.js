@@ -1,5 +1,5 @@
 const express = require('express');
-const { signUp, signIn, updateUser, deleteUser,signOut } = require('../../Controller/userController');
+const { signUp, signIn, updateUser, deleteUser,signOut, getUserListings } = require('../../Controller/userController');
 const { google } = require('../../Controller/authController');
 const { verifyToken } = require('../../utils/verifyUser');
 const { createListing } = require('../../Controller/ListingController');
@@ -14,5 +14,6 @@ router.delete('/delete/:id', verifyToken, deleteUser);
 router.get('/signOut',signOut);
 //listing
 router.post('/create',verifyToken,createListing);
+router.get('/listing/:id',verifyToken,getUserListings);
 
 module.exports = router;
