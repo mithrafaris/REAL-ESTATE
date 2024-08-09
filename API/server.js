@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 const connectDB = require('./Database/connection');
 const cookieParser = require('cookie-parser');
 const userRoute = require('./Route/userRoute/userRoutes.js');
-const adminRoute = require('./Route/adminRoute/adminRoute.js')
+
 
 dotenv.config({ path: path.join(__dirname, '.env') });
 
@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 connectDB();
 
 app.use('/user', userRoute);
-app.use('/admin', adminRoute);
+
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
