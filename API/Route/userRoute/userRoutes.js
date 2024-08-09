@@ -2,7 +2,7 @@ const express = require('express');
 const { signUp, signIn, updateUser, deleteUser,signOut, getUserListings } = require('../../Controller/userController');
 const { google } = require('../../Controller/authController');
 const { verifyToken } = require('../../utils/verifyUser');
-const { createListing } = require('../../Controller/ListingController');
+const { createListing, deleteListing } = require('../../Controller/ListingController');
 
 const router = express.Router();
 
@@ -15,5 +15,6 @@ router.get('/signOut',signOut);
 //listing
 router.post('/create',verifyToken,createListing);
 router.get('/listing/:id',verifyToken,getUserListings);
+router.delete('/delete/:id',verifyToken,deleteListing);
 
 module.exports = router;
