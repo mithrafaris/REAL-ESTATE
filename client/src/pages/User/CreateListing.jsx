@@ -300,7 +300,7 @@ console.log(formData);
                 required
               />
               <p className="text-sm">
-                Regular Price <span>($/Month)</span>
+                Regular Price 
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -328,7 +328,7 @@ console.log(formData);
                  
                 />
                 <p className="text-sm">
-                   discountPrice <span>($/Month)</span>
+                   discountPrice 
                 </p>
               </div>
             )}

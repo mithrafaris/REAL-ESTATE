@@ -1,5 +1,4 @@
-// utils/error.js
-module.exports = (statusCode, message) => {
+exports.errorHandler = (statusCode, message) => {
   const error = new Error(message);
   error.statusCode = statusCode;
   return error;

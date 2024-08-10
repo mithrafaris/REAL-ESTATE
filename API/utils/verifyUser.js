@@ -13,7 +13,8 @@ exports.verifyToken = (req, res, next) => {
       return next(errorHandler(403, 'Forbidden'));
     }
 
-    req.user = user;
+    console.log('Decoded user from token:', user);  // Add this line to debug
+    req.user = user;  // Ensure req.user is populated with correct data
     next();
   });
 };

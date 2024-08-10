@@ -133,26 +133,22 @@ function Profile() {
       setShowListingError(true);
     }
   };
-  const handleListingDelete= async (listingId)=>{
+  const handleListingDelete = async (listingId) => {
     try {
-      const res = await fetch(`/user/delete/${listingId}`,{
+      const res = await fetch(`/user/deletelisting/${listingId}`, {
         method: 'DELETE',
       });
       const data = await res.json();
-      if(data.success===false){
+      if (data.success === false) {
         console.log(data.message);
-        return ;
-        
+        return;
       }
-
-      setUserListing((prev)=>prev.filter((listing)=>listing.id!==listing.Id))
+  
+      setUserListing((prev) => prev.filter((listing) => listing._id !== listingId));
     } catch (error) {
       console.log(error);
-      
-      
     }
-  }
-
+  };
   return (
     <div>
       <Header />
