@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBrowserRouter } from "react-router-dom";
 import UserLogin from '../pages/User/UserSignIn';
-import Home from '../pages/User/home';
+import Home from '../pages/User/Home';
 import PageNotFound from '../components/PageError';
 import About from '../pages/User/About';
 import SignUp from '../pages/User/UserSignUp';
@@ -9,31 +9,41 @@ import ForgetPassword from '../pages/User/ForgetPassword';
 import Profile from '../pages/User/Profile';
 import PrivateRoute from '../components/PrivateRoute';
 import CreateListing from '../pages/User/CreateListing';
+import UpdateListing from '../pages/User/Update-Listing';
 
 const Router = createBrowserRouter([
-  // user routes
   {
-    path: "/SignIn",
+    path: "/sign-in",
     element: <UserLogin />
   },
   {
-    path: "/Home",
+    path: "/home",
     element: <Home />
   },
   {
-    path: "/About",
+    path: "/about",
     element: <About />
   },
   {
-    path: "/SignUp",
+    path: "/sign-up",
     element: <SignUp />
   },
   {
-    path: "/ForgotPassword",
+    path: "/forgot-password",
     element: <ForgetPassword />
   },
   {
-    path: "/CreateListing",
+    path: "/profile",
+    element: <PrivateRoute />,
+    children: [
+      {
+        path: "",
+        element: <Profile />
+      }
+    ]
+  },
+  {
+    path: "/create-listing",
     element: <PrivateRoute />,
     children: [
       {
@@ -43,12 +53,12 @@ const Router = createBrowserRouter([
     ]
   },
   {
-    path: "/Profile",
+    path: "/update-listing/:listingId",
     element: <PrivateRoute />,
     children: [
       {
         path: "",
-        element: <Profile />
+        element: <UpdateListing />
       }
     ]
   },

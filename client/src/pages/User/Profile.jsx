@@ -134,6 +134,8 @@ function Profile() {
     }
   };
   const handleListingDelete = async (listingId) => {
+    console.log(listingId);
+    
     try {
       const res = await fetch(`/user/deletelisting/${listingId}`, {
         method: 'DELETE',
@@ -143,12 +145,15 @@ function Profile() {
         console.log(data.message);
         return;
       }
+
   
       setUserListing((prev) => prev.filter((listing) => listing._id !== listingId));
     } catch (error) {
       console.log(error);
     }
   };
+  
+
   return (
     <div>
       <Header />
@@ -247,7 +252,10 @@ function Profile() {
                     <p>{listing.name}</p>
                   </Link>
                   <button onClick={()=>handleListingDelete(listing._id)} className='text-red-700 uppercase'>Delete</button>
-                  <button className='text-green-700 uppercase'>edit</button>
+                  <Link to={`/update-listing/${listing._id}`}>
+                  <button className='text-green-700 uppercase'>Edit</button>
+                </Link>
+                
                 </div>
               ))}
             </div>
