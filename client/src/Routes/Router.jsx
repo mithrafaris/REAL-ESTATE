@@ -8,13 +8,13 @@ import SignUp from '../pages/User/UserSignUp';
 import ForgetPassword from '../pages/User/ForgetPassword';
 import Profile from '../pages/User/Profile';
 import PrivateRoute from '../components/PrivateRoute';
-import CreateListing from '../pages/User/CreateListing';
+import CreateListing from '../pages/User/Create-Listing';
 import UpdateListing from '../pages/User/Update-Listing';
 
 const Router = createBrowserRouter([
   {
     path: "/sign-in",
-    element: <UserLogin />
+    element: <UserLogin/>
   },
   {
     path: "/home",
@@ -63,7 +63,7 @@ const Router = createBrowserRouter([
     ]
   },
   {
-    path: "/*",
+    path: "/error",
     element: <PageNotFound />,
   },
 ]);

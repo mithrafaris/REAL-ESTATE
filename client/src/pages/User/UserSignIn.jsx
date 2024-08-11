@@ -117,7 +117,7 @@ function SignIn() {
           <div className="flex gap-2 justify-between mt-5">
             <div>
               Don't have an account?
-              <Link to="/signup">
+              <Link to="/sign-up">
                 <span className="text-red-900"> Sign Up</span>
               </Link>
             </div>

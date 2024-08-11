@@ -49,7 +49,7 @@ function SignUp() {
         toast('Successfully created your account', {
           icon: '👏',
         });
-        navigate('/SignIn');
+        navigate('/sign-in');
       } else {
         toast.error(data.message || 'Sign-up failed.');
       }
@@ -118,7 +118,7 @@ function SignUp() {
           <div className="flex gap-2 justify-between mt-5">
             <div>
               Have an account?
-              <Link to="/signin">
+              <Link to="/sign-in">
                 <span className="text-red-900"> Sign In</span>
               </Link>
             </div>
