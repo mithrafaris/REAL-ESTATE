@@ -1,8 +1,8 @@
 const express = require('express');
-const { signUp, signIn, updateUser, deleteUser,signOut, getUserListings } = require('../../Controller/userController');
+const { signUp, signIn, updateUser, deleteUser, signOut, getUserListings } = require('../../Controller/userController');
 const { google } = require('../../Controller/authController');
 const { verifyToken } = require('../../utils/verifyUser');
-const { createListing, deleteListing, updateListing,getListing,getUser,getSearching} = require('../../Controller/ListingController');
+const { createListing, deleteListing, updateListing, getListing, getUser, getSearching } = require('../../Controller/ListingController');
 
 const router = express.Router();
 
@@ -11,16 +11,15 @@ router.post('/signin', signIn);
 router.post('/google', google);
 router.post('/update/:id', verifyToken, updateUser);
 router.delete('/delete/:id', verifyToken, deleteUser);
-router.get('/signOut',signOut);
-//listing
-router.post('/create',verifyToken,createListing);
-router.get('/listing/:id',verifyToken,getUserListings);
-router.delete('/deletelisting/:id',verifyToken,deleteListing);
-router.post('/updated/:id',verifyToken,updateListing);
-router.get('/getlisting/:id',getListing);
-router.get('/:id',verifyToken,getUser)
-router.get('/getSearch',getSearching)
+router.get('/signOut', signOut);
 
-
+// Listing Routes
+router.post('/create', verifyToken, createListing);
+router.get('/listing/:id', verifyToken, getUserListings);
+router.delete('/deletelisting/:id', verifyToken, deleteListing);
+router.post('/update/:id', verifyToken, updateListing);
+router.get('/getlisting/:id', getListing);
+router.get('/:id', verifyToken, getUser);
+router.get('/getSearch', getSearching);
 
 module.exports = router;

@@ -71,7 +71,7 @@ exports.getSearching = async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || 9;
     const startIndex = parseInt(req.query.startIndex) || 0;
-    
+
     let offer = req.query.offer;
     if (offer === undefined || offer === 'false') {
       offer = { $in: [false, true] };
@@ -83,12 +83,12 @@ exports.getSearching = async (req, res, next) => {
     }
 
     let parking = req.query.parking;
-    if (parking === undefined|| parking === 'false') {
+    if (parking === undefined || parking === 'false') {
       parking = { $in: [false, true] };
     }
 
     let latitude = req.query.latitude;
-    if (latitude === undefined|| latitude === 'false') {
+    if (latitude === undefined || latitude === 'false') {
       latitude = { $in: [false, true] };
     }
 
