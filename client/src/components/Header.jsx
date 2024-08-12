@@ -56,7 +56,7 @@ function Header() {
               <img src={currentUser.avatar} alt="profile" className="h-8 w-8 rounded-full object-cover" />
             </Link>
           ) : (
-            <Link to="/SignIn">
+            <Link to="/Sign-in">
               <li className="hidden sm:inline text-slate-900 hover:underline">Sign In</li>
             </Link>
           )}
