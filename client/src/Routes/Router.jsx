@@ -11,7 +11,8 @@ import PrivateRoute from '../components/PrivateRoute';
 import CreateListing from '../pages/User/Create-Listing';
 import UpdateListing from '../pages/User/Update-Listing';
 import Listing from '../pages/User/Listing';
-import Search from '../components/Search';
+import Search from '../pages/User/Search';
+
 
 const Router = createBrowserRouter([
   {
