@@ -49,7 +49,7 @@ export default function Listing() {
   return (
     <div className="min-h-screen bg-gray-100">
       <Header />
-      <main className="py-8 px-4 relative"> {/* Added relative positioning */}
+      <main className="py-8 px-4 relative"> 
         {loading && <p className="text-center my-7 text-2xl">Loading...</p>}
         {error && (
           <p className="text-center my-7 text-2xl text-red-600">Something went wrong!</p>

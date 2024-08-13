@@ -11,6 +11,7 @@ import PrivateRoute from '../components/PrivateRoute';
 import CreateListing from '../pages/User/Create-Listing';
 import UpdateListing from '../pages/User/Update-Listing';
 import Listing from '../pages/User/Listing';
+import Search from '../components/Search';
 
 const Router = createBrowserRouter([
   {
@@ -33,8 +34,11 @@ const Router = createBrowserRouter([
     path: "/forgot-password",
     element: <ForgetPassword />
   },
-  { path:'/listing/:listingId', element:<Listing />},
-
+  { path:'/listing/:listingId',
+        element:<Listing />},
+        
+   {path:'/Search',
+     element:<Search />},
 
   {
     path: "/profile",
