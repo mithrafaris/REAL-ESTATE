@@ -32,7 +32,7 @@ function OAuth() {
 
       if (res.ok) {
         dispatch(signInSuccess(data));
-        navigate('/Home');
+        navigate('/');
       } else {
         console.error('Google sign-in failed', data);
       }

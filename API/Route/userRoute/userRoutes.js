@@ -12,14 +12,15 @@ router.post('/google', google);
 router.post('/update/:id', verifyToken, updateUser);
 router.delete('/delete/:id', verifyToken, deleteUser);
 router.get('/signOut', signOut);
-
+router.get('/:id', verifyToken, getUser);
 // Listing Routes
 router.post('/create', verifyToken, createListing);
 router.get('/listing/:id', verifyToken, getUserListings);
 router.delete('/deletelisting/:id', verifyToken, deleteListing);
 router.post('/update/:id', verifyToken, updateListing);
 router.get('/getlisting/:id', getListing);
-router.get('/:id', verifyToken, getUser);
-router.get('/getSearch', getSearching);
+router.get('/get', getSearching);
+
+
 
 module.exports = router;

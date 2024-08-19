@@ -56,7 +56,7 @@ function SignIn() {
         toast.success('Login successful', {
           icon: '👏',
         });
-        navigate('/Home');
+        navigate('/');
       } else {
         dispatch(signInFailure(data.message));
         toast.error(data.message || 'Sign-in failed.');
