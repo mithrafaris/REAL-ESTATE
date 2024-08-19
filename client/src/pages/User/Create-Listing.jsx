@@ -90,7 +90,7 @@ function CreateListing() {
       if (data.success === false) {
         setError(data.message);
       }
-      navigate(`/user/${data._id}`)
+      navigate(`/listing/${data._id}`)
       
     } catch (error) {
       setError(error.message);
