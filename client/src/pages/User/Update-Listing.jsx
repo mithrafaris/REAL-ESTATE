@@ -99,9 +99,10 @@ function CreateListing() {
         return setError('You must upload at least one image');
       if (+formData.regularPrice < +formData.discountPrice)
         return setError('Discount price must be lower than regular price');
+      
       setLoading(true);
       setError(false);
-
+  
       const res = await fetch(`/user/updated/${params.listingId}`, {
         method: 'POST',
         headers: {
@@ -110,21 +111,26 @@ function CreateListing() {
         body: JSON.stringify({
           ...formData,
           userRef: currentUser._id,
-          offer:formData.offer||false
+          offer: formData.offer || false,
         }),
       });
+      
       const data = await res.json();
       setLoading(false);
+  
       if (!data.success) {
-       return setError(data.message);
+        return setError(data.message);
       }
-      navigate(`/listing/${data._id}`)
-      
+  
+      // Navigate to the listing page after successful update
+      navigate(`/user/${data._id}`);
+  
     } catch (error) {
-      setError('failed to update listing');
+      setError('Failed to update listing');
       setLoading(false);
     }
   };
+  
 
   const handleImageSubmit = (e) => {
     e.preventDefault();
