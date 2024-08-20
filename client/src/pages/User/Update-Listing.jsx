@@ -52,6 +52,8 @@ function CreateListing() {
       const listingId = params.listingId;
       const res = await fetch(`/user/getListing/${listingId}`);
       const data = await res.json();
+      console.log(data);
+      
       if (data.success === false) {
         console.log(data.message);
         console.log(listingId);
@@ -100,7 +102,7 @@ function CreateListing() {
       setLoading(true);
       setError(false);
 
-      const res = await fetch(`/user/updated/${params.listingId}`, {
+      const res = await fetch(`/user/updatelisting/${listingId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -113,18 +115,19 @@ function CreateListing() {
       });
       const data = await res.json();
       setLoading(false);
-      if (data.success === false) {
-        setError(data.message);
+      if (!data.success) {
+       return setError(data.message);
       }
-      navigate(`/user/${data._id}`)
+      navigate(`/user/listing/${data._id}`)
       
     } catch (error) {
-      setError(error.message);
+      setError('failed to update listing');
       setLoading(false);
     }
   };
 
   const handleImageSubmit = (e) => {
+    e.preventDefault();
     if (files.length > 0 && files.length + formData.imageUrl.length < 7) {
       setUploading(true);
       setImageUploadError(false);
