@@ -16,10 +16,10 @@ router.get('/:id', verifyToken, getUser);
 
 // Listing Routes
 router.post('/create', verifyToken, createListing);
-router.get('/listing/:id', verifyToken, getUserListings);
+router.get('/listing/:id', verifyToken, getUserListings);//full users
 router.delete('/deletelisting/:id', verifyToken, deleteListing);
-router.post('/update/:id', verifyToken, updateListing);
-router.get('/listing/:id', getListing);
+router.post('/updated/:id', verifyToken, updateListing);
+router.get('/getlisting/:id', getListing);//single user
 router.get('/listing/listing/:id', getSearching);
 
 module.exports = router;

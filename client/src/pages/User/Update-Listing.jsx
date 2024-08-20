@@ -50,7 +50,7 @@ function CreateListing() {
     
     const fetchListing = async () => {
       const listingId = params.listingId;
-      const res = await fetch(`/user/getListing/${listingId}`);
+      const res = await fetch(`/user/getlisting/${listingId}`);
       const data = await res.json();
       console.log(data);
       
@@ -102,7 +102,7 @@ function CreateListing() {
       setLoading(true);
       setError(false);
 
-      const res = await fetch(`/user/updatelisting/${listingId}`, {
+      const res = await fetch(`/user/updated/${params.listingId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -118,7 +118,7 @@ function CreateListing() {
       if (!data.success) {
        return setError(data.message);
       }
-      navigate(`/user/listing/${data._id}`)
+      navigate(`/listing/${data._id}`)
       
     } catch (error) {
       setError('failed to update listing');
