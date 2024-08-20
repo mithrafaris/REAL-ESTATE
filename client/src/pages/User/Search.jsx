@@ -125,13 +125,7 @@ export default function Search() {
     const searchQuery = urlParams.toString();
     
     // Ensure the endpoint is correct for fetching more listings
-    const res = await fetch(`/user/listing/listing?${searchQuery}`);
-    if (!res.ok) {
-      
-      console.error('Failed to fetch more listings');
-      return;
-    }
-  
+    const res = await fetch(`/user/listing/listing/:id?${searchQuery}`);
     const data = await res.json();
     
     if (data.length < 9) {
