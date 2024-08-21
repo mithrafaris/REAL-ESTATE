@@ -131,7 +131,7 @@ export default function Search() {
     if (data.length < 9) {
       setShowMore(false);
     }
-    setListings((prevListings) => [...prevListings, ...data]);
+    setListings([...listings, ...data]);
   };
   
   return (
