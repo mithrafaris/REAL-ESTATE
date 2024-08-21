@@ -208,6 +208,12 @@ function Profile() {
             className="border p-3 rounded-lg"
             onChange={handleChange}
           />
+          <Link
+          className='bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95'
+          to={'/create-listing'}
+        >
+          Create Listing
+        </Link>
           <button
             type="submit"
             className="bg-blue-700 text-white p-3 rounded-lg hover:opacity-95 disabled:opacity-80 uppercase transition duration-300"
