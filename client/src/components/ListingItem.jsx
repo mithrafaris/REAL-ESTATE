@@ -19,7 +19,7 @@ export default function ListingItem({ listing }) {
           </div>
           <p className="text-sm text-gray-900 line-clamp-2">{listing.description}</p>
           <p className="mt-2  text-gray-900 font-semibold">
-          ₹
+          $
             {listing.offer
               ? listing.discountPrice.toLocaleString('en-IN')
               : listing.regularPrice.toLocaleString('en-IN')}

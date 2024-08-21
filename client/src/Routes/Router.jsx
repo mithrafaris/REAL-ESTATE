@@ -5,7 +5,7 @@ import Home from '../pages/User/home';
 import PageNotFound from '../components/PageError';
 import About from '../pages/User/About';
 import SignUp from '../pages/User/UserSignUp';
-import ForgetPassword from '../pages/User/ForgetPassword';
+
 import Profile from '../pages/User/Profile';
 import PrivateRoute from '../components/PrivateRoute';
 import CreateListing from '../pages/User/Create-Listing';
@@ -30,10 +30,6 @@ const Router = createBrowserRouter([
   {
     path: "/sign-up",
     element: <SignUp />
-  },
-  {
-    path: "/forgot-password",
-    element: <ForgetPassword />
   },
   { path:'/listing/:listingId',
         element:<Listing />},

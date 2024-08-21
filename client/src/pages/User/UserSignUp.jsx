@@ -72,10 +72,10 @@ function SignUp() {
           <img src={logo} className="w-20 h-20 mx-auto" alt="Logo" />
           <div className="flex justify-center mb-4 md:mb-6">
             <CursiveTypography variant="h4" component="span" sx={{ color: 'goldenrod' }}>
-              Real
+              Dream
             </CursiveTypography>
             <CursiveTypography variant="h4" component="span" sx={{ color: 'black' }}>
-              Estate
+              line
             </CursiveTypography>
           </div>
           <form onSubmit={handleSubmit} className="flex flex-col mb-4 md:mb-6">

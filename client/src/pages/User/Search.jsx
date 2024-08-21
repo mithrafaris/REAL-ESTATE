@@ -233,7 +233,7 @@ export default function Search() {
               <option value='createdAt_asc'>Oldest</option>
             </select>
           </div>
-          <button className='bg-green-700 text-white p-3 rounded-lg uppercase hover:opacity-95'>
+          <button className='bg-blue-900 text-white p-3 rounded-lg uppercase hover:opacity-95'>
             Search
           </button>
         </form>
@@ -260,7 +260,7 @@ export default function Search() {
           {showMore && (
             <button
               onClick={onShowMoreClick}
-              className='text-green-700 hover:underline p-7 text-center w-full'
+              className='text-blue-900 hover:underline p-7 text-center w-full'
             >
               Show more
             </button>

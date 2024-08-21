@@ -209,7 +209,7 @@ function Profile() {
             onChange={handleChange}
           />
           <Link
-          className='bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95'
+          className='bg-blue-900 text-white p-3 rounded-lg uppercase text-center hover:opacity-95'
           to={'/create-listing'}
         >
           Create Listing
@@ -228,7 +228,7 @@ function Profile() {
           <span onClick={handleSignOut} className="text-red-700 cursor-pointer">Sign Out</span>
         </div>
         <div>
-          <button onClick={handleShowListings} className="text-green-700 w-full">
+          <button onClick={handleShowListings} className="text-blue-900 w-full">
             Show Listings
           </button>
           <p className="text-red-700 mt-5">

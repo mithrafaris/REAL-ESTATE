@@ -55,20 +55,21 @@ function Home() {
       <Header />
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 px-4 py-6 md:px-6 lg:px-12">
       <div className="text-center">
-        <Typography variant="h2" component="h1" gutterBottom className="font-bold text-gray-800 text-xl md:text-2xl lg:text-3xl">
-          Your <span className="text-green-600">dream home</span> is just a click away!
-          <br />
-          Where your story begins.
-        </Typography>
-        <Typography variant="body1" className="text-gray-600 mt-3 text-xs md:text-sm lg:text-base">
-          DreamLine builders is your gateway to finding the perfect home.
-          <br />
-          Choose from a vast collection of properties tailored to meet your needs.
-        </Typography>
-        <Link to="/Search" className="text-blue-500 underline mt-3 inline-block text-xs md:text-sm lg:text-base">
-          Let's get started...
-        </Link>
-      </div>
+  <Typography variant="h2" component="h1" gutterBottom className="font-bold text-gray-800 text-lg md:text-xl lg:text-2xl">
+    Your <span className="text-blue-900">dream home</span> is just a click away!
+    <br />
+    Where your story begins.
+  </Typography>
+  <Typography variant="body1" className="text-gray-600 mt-3 text-xs sm:text-sm md:text-base lg:text-lg">
+    DreamLine builders is your gateway to finding the perfect home.
+    <br />
+    Choose from a vast collection of properties tailored to meet your needs.
+  </Typography>
+  <Link to="/About" className="text-blue-500 underline mt-3 inline-block text-xs sm:text-sm md:text-base lg:text-lg">
+  learn more...
+  </Link>
+</div>
+
     </div>
     
       <div className="my-8 px-4 md:px-8 lg:px-16">
