@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import { styled } from '@mui/system';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import LoginIcon from '@mui/icons-material/Login'
+import LoginIcon from '@mui/icons-material/Login';
 
 const CursiveTypography = styled(Typography)({
   fontFamily: 'fantasy',
@@ -49,11 +49,11 @@ function Header() {
             </Box>
           </Link>
         </div>
-        <form onSubmit={handleSubmit} className='bg-slate-100 p-3 rounded-lg flex items-center'>
+        <form onSubmit={handleSubmit} className="bg-slate-100 p-3 rounded-lg flex items-center w-full sm:w-auto">
           <input
-            type='text'
-            placeholder='Search...'
-            className='bg-transparent focus:outline-none w-full sm:w-64'
+            type="text"
+            placeholder="Search..."
+            className="bg-transparent focus:outline-none w-full sm:w-64"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -61,16 +61,16 @@ function Header() {
             <FaSearch />
           </button>
         </form>
-        <ul className="flex gap-4 items-center">
+        <ul className="flex gap-4 items-center mt-4 sm:mt-0">
           {currentUser ? (
             <Link to="/profile">
               <img src={currentUser.avatar} alt="profile" className="h-12 w-12 rounded-full object-cover" />
             </Link>
           ) : (
             <Link to="/sign-in" className="flex items-center">
-      <LoginIcon className="text-slate-900 mr-2" />
-      <li className="hidden sm:inline text-slate-100 hover:underline">Sign In</li>
-    </Link>
+              <LoginIcon className="text-slate-900 mr-2" />
+              <li className="hidden sm:inline text-slate-100 hover:underline">Sign In</li>
+            </Link>
           )}
         </ul>
       </div>

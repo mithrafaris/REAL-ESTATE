@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
 import { Link } from 'react-router-dom';
-import { Typography } from '@mui/material';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import SwiperCore from 'swiper';
 import 'swiper/css/bundle';
+import real from '../../assets/real.jpg'
+import home from '../../assets/home.jpeg'
 import ListingItem from '../../components/ListingItem';
 
 function Home() {
@@ -51,28 +52,46 @@ function Home() {
   }, []);
 
   return (
-    <div>
+    <div className='bg-white'>
       <Header />
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 px-4 py-6 md:px-6 lg:px-12">
-      <div className="text-center">
-  <Typography variant="h2" component="h1" gutterBottom className="font-bold text-gray-800 text-lg md:text-xl lg:text-2xl">
-    Your <span className="text-blue-900">dream home</span> is just a click away!
-    <br />
-    Where your story begins.
-  </Typography>
-  <Typography variant="body1" className="text-gray-600 mt-3 text-xs sm:text-sm md:text-base lg:text-lg">
-    DreamLine builders is your gateway to finding the perfect home.
-    <br />
-    Choose from a vast collection of properties tailored to meet your needs.
-  </Typography>
-  <Link to="/About" className="text-blue-500 underline mt-3 inline-block text-xs sm:text-sm md:text-base lg:text-lg">
-  learn more...
-  </Link>
-</div>
+      <div className="mx-auto w-full bg-white max-w-7xl">
+      <aside className="relative overflow-hidden text-black rounded-lg sm:mx-16 mx-2 sm:py-16 sm:block hidden">
+      <div className="relative z-10 max-w-screen-xl px-4 pb-20 pt-10 sm:py-24 mx-auto sm:px-6 lg:px-8">
+          <div className="max-w-xl sm:mt-1 mt-80 space-y-8 text-center sm:text-right sm:ml-auto">
+              <h2 className="text-5xl semi-bold sm:text-4xl">
+                  Your <span className="text-blue-900">dream home </span>
+                  is just a click away!
+                  <span className="hidden sm:block text-4xl">
+                      <br />
+                      Where your story begins.....
+                  </span>
+              </h2>
+          </div>
+      </div>
+  
+      <div className="absolute inset-0 w-full sm:my-10 sm:pt-1 pt-12 h-full">
+          <img className="w-96 h-96" src={home} alt="image1" />
+      </div>
+  </aside>
+  
 
-    </div>
+          <div className="grid  place-items-center sm:mt-20">
+              <img className="sm:w-100 w-50" src={real} alt="image2" />
+          </div>
+
+          <h1 className="text-center text-2xl sm:text-3xl py-10 font-mono">" DreamLine is your gateway to finding the perfect home!"
+          <br/>
+          <Link
+          to="/About"
+          className="text-blue-900 text-xl"
+        >
+
+          Learn more...
+        </Link>
+        </h1>
+      </div>
     
-      <div className="my-8 px-4 md:px-8 lg:px-16">
+      <div className="my-8 bg-white px-4 md:px-8 lg:px-16">
         <Swiper
           modules={[Navigation]}
           navigation
@@ -92,7 +111,7 @@ function Home() {
             </SwiperSlide>
           ))}
         </Swiper>
-        <div className='max-w-6xl mx-auto p-3 flex flex-col gap-8 my-10'>
+        <div className='max-w-6xl mx-auto  p-3 flex flex-col gap-8 my-10'>
           {offerListing && offerListing.length > 0 && (
             <div>
               <div className='my-3'>
@@ -121,7 +140,7 @@ function Home() {
           )}
           {saleListing && saleListing.length > 0 && (
             <div>
-              <div className='my-3'>
+              <div className='my-3 bg'>
                 <h2 className='text-xl md:text-2xl lg:text-3xl font-semibold text-slate-600'>Recent places for sale</h2>
                 <Link className='text-xs md:text-sm lg:text-base text-blue-800 hover:underline' to={'/search?type=sale'}>Show more places for sale</Link>
               </div>

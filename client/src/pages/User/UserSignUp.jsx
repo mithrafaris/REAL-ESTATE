@@ -10,7 +10,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import OAuth from '../../components/OAuth';
 
 const CursiveTypography = styled(Typography)({
-  fontFamily: 'cursive',
+  fontFamily: 'fantasy',
   fontWeight: 'bold',
 });
 
@@ -75,7 +75,7 @@ function SignUp() {
               Dream
             </CursiveTypography>
             <CursiveTypography variant="h4" component="span" sx={{ color: 'black' }}>
-              line
+              Line
             </CursiveTypography>
           </div>
           <form onSubmit={handleSubmit} className="flex flex-col mb-4 md:mb-6">
