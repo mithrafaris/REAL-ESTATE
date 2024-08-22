@@ -58,10 +58,10 @@ function Home() {
       <aside className="relative overflow-hidden text-black rounded-lg sm:mx-16 mx-2 sm:py-16 sm:block hidden">
       <div className="relative z-10 max-w-screen-xl px-4 pb-20 pt-10 sm:py-24 mx-auto sm:px-6 lg:px-8">
           <div className="max-w-xl sm:mt-1 mt-80 space-y-8 text-center sm:text-right sm:ml-auto">
-              <h2 className="text-5xl font-mono sm:text-4xl">
+              <h2 className="text-5xl font-serif sm:text-5xl">
                   Your <span className="text-blue-900">dream home </span>
                   is just a click away!
-                  <span className="hidden sm:block text-2xl">
+                  <span className="hidden sm:block text-3xl">
                       <br />
                       Where your story begins.....
                   </span>
@@ -79,7 +79,7 @@ function Home() {
               <img className="sm:w-100 w-50" src={real} alt="image2" />
           </div>
 
-          <h1 className="text-center text-2xl sm:text-3xl py-10 font-mono">" DreamLine is your gateway to finding the perfect home!"
+          <h1 className="text-center text-2xl sm:text-4xl py-10 font-serif">" DreamLine is your gateway to finding the perfect home!"
           <br/>
           <Link
           to="/About"
@@ -115,7 +115,7 @@ function Home() {
           {offerListing && offerListing.length > 0 && (
             <div>
               <div className='my-3'>
-                <h2 className='text-xl md:text-2xl lg:text-3xl font-mono text-slate-900'>Recent offers</h2>
+                <h2 className='text-xl md:text-2xl lg:text-3xl font-serif text-slate-900'>Recent offers</h2>
                 <Link className='text-xs md:text-sm lg:text-base text-blue-800 hover:underline' to={'/search?offer=true'}>Show more offers</Link>
               </div>
               <div className='flex flex-wrap gap-4'>
@@ -128,7 +128,7 @@ function Home() {
           {rentListing && rentListing.length > 0 && (
             <div>
               <div className='my-3'>
-                <h2 className='text-xl md:text-2xl lg:text-3xl font-mono text-slate-900'>Recent places for rent</h2>
+                <h2 className='text-xl md:text-2xl lg:text-3xl font-serif text-slate-900'>Recent places for rent</h2>
                 <Link className='text-xs md:text-sm lg:text-base text-blue-800 hover:underline' to={'/search?type=rent'}>Show more places for rent</Link>
               </div>
               <div className='flex flex-wrap gap-4'>
@@ -141,7 +141,7 @@ function Home() {
           {saleListing && saleListing.length > 0 && (
             <div>
               <div className='my-3 bg'>
-                <h2 className='text-xl md:text-2xl lg:text-3xl font-mono text-slate-900'>Recent places for sale</h2>
+                <h2 className='text-xl md:text-2xl lg:text-3xl font-serif text-slate-900'>Recent places for sale</h2>
                 <Link className='text-xs md:text-sm lg:text-base text-blue-800 hover:underline' to={'/search?type=sale'}>Show more places for sale</Link>
               </div>
               <div className='flex flex-wrap gap-4'>
