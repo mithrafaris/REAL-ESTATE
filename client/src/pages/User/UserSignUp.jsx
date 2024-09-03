@@ -71,7 +71,7 @@ function SignUp() {
         <div className="text-center">
           <img src={logo} className="w-20 h-20 mx-auto" alt="Logo" />
           <div className="flex justify-center mb-4 md:mb-6">
-            <CursiveTypography variant="h4" component="span" sx={{ color: 'goldenrod' }}>
+            <CursiveTypography variant="h4" component="span" sx={{ color: 'white' }}>
               Dream
             </CursiveTypography>
             <CursiveTypography variant="h4" component="span" sx={{ color: 'black' }}>
